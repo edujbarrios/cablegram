@@ -1,0 +1,54 @@
+{
+  "benchmark": "agent-handoff-v1",
+  "date": "2026-10-04",
+  "design": {
+    "task": "Write a handoff to a senior backend engineer from the supplied incident notes.",
+    "model_control": "Two independent agents using the same model and base prompt.",
+    "treatment": "The Cablegram agent read and applied skill/SKILL.md; the baseline agent was instructed not to read or use it.",
+    "tokenizer": "tiktoken 0.12.0, cl100k_base",
+    "word_definition": "Whitespace-delimited strings",
+    "fact_evaluation": "Manual explicit-presence check against the critical_facts list"
+  },
+  "critical_facts": [
+    "authentication service at src/auth/session.ts:118",
+    "Redis pool reaches configured maximum 50",
+    "3 log occurrences during parallel token refresh",
+    "correlation only; root cause not confirmed",
+    "login requests return HTTP 503",
+    "restart restores operation for approximately 20 minutes, then recurrence",
+    "proposed per-session mutex around refresh",
+    "do not deploy before multi-instance testing",
+    "no authentication bypass or credential exposure observed",
+    "reproduce with 4 instances under 200 requests/second"
+  ],
+  "runs": [
+    {
+      "name": "Baseline agent",
+      "cablegram": false,
+      "output": "Investigate the authentication service at `src/auth/session.ts:118`. During parallel token refresh, logs show three occurrences where the Redis connection pool reached its configured maximum of 50. This is correlation only; the root cause is not confirmed. When the condition occurs, login requests return HTTP 503.\n\nRestarting the service restores operation for approximately 20 minutes, after which the issue recurs. The proposed fix is a per-session mutex around refresh, but do not deploy it until multi-instance behavior has been tested.\n\nNext, reproduce the issue with four instances under 200 requests/second. No authentication bypass or credential exposure was observed.",
+      "metrics": {
+        "characters": 678,
+        "words": 96,
+        "tokens": 126
+      },
+      "critical_facts_present": [true, true, true, true, true, true, true, true, true, true]
+    },
+    {
+      "name": "Cablegram agent",
+      "cablegram": true,
+      "output": "scope: authentication service, `src/auth/session.ts:118`\nfailure/impact: Redis connection pool reaches configured max 50; login requests return HTTP 503\nevidence: 3 log occurrences during parallel token refresh; correlation only, root cause unconfirmed\nworkaround: service restart restores operation for ~20 minutes, then recurrence\nproposed fix: per-session mutex around refresh\nconstraint: do not deploy until multi-instance behavior is tested\nsecurity: no authentication bypass or credential exposure observed\nnext: reproduce with 4 instances at 200 requests/second",
+      "metrics": {
+        "characters": 568,
+        "words": 71,
+        "tokens": 113
+      },
+      "critical_facts_present": [true, true, true, true, true, true, true, true, true, true]
+    }
+  ],
+  "limitations": [
+    "Single task and one run per condition",
+    "Manual fact-presence evaluation is not semantic verification",
+    "Results are specific to this prompt, model, and tokenizer",
+    "Agent response latency and task execution quality were not measured"
+  ]
+}

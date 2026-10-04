@@ -68,8 +68,8 @@ To use it, make the skill available through your agent's supported instruction
 or skill mechanism. Instruction formats vary, so compatibility is not claimed
 for products that have not been tested.
 
-This repository does **not** yet include a tokenizer, CLI, optimizer, semantic
-intermediate representation, verifier, benchmark results, or middleware.
+This repository does **not** yet include a tokenizer CLI, optimizer, semantic
+intermediate representation, verifier, full benchmark harness, or middleware.
 
 ## Optimization target
 
@@ -98,6 +98,26 @@ itself. It treats critical one-word distinctions such as `possible` versus
 Claims must be benchmark-driven. Future measurements will distinguish exact
 checks, task-equivalence under a benchmark, heuristic evidence, estimates, and
 unknowns. Token reduction alone will never be presented as semantic proof.
+
+## Pilot benchmark
+
+Two independent agents received the same incident-handoff task and source facts.
+The baseline agent responded normally; the Cablegram agent read and applied
+[`skill/SKILL.md`](skill/SKILL.md). Both outputs were checked for the same ten
+critical facts and measured with `tiktoken 0.12.0` using `cl100k_base`.
+
+| Condition | Characters | Words | Tokens | Critical facts |
+| --- | ---: | ---: | ---: | ---: |
+| Baseline agent | 678 | 96 | 126 | 10/10 |
+| Cablegram agent | 568 | 71 | 113 | 10/10 |
+| Change | -16.2% | -26.0% | **-10.3%** | no change |
+
+In this run, Cablegram saved 13 tokens while preserving every explicitly scored
+fact. This is a single-task pilot with one run per condition, not evidence of a
+general reduction rate or semantic equivalence. The fact check was manual and
+only establishes explicit presence. The complete prompt, raw outputs, rubric,
+measurements, and limitations are stored in
+[`benchmarks/agent_handoff_v1.json`](benchmarks/agent_handoff_v1.json).
 
 ## Roadmap
 

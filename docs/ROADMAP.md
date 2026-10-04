@@ -3,12 +3,13 @@
 Cablegram develops in evidence-building phases. Each phase should remain small,
 tested, and honest about what it establishes.
 
-## Phase 1: open-source foundation (current)
+## Phase 1: open-source foundation (complete)
 
 - Establish Apache-2.0 licensing, attribution, contribution, conduct, security,
   citation, vision, and roadmap documents.
 - Publish a usable communication skill for coding agents.
-- Make no optimizer or benchmark-performance claims.
+- Make no optimizer claims. Keep the single pilot comparison clearly separated
+  from the future benchmark harness and avoid generalizing its result.
 
 ## Phase 2: measurement foundation
 
