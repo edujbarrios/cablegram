@@ -64,20 +64,69 @@ protecting negation, uncertainty, causality, quantities, identifiers, commands,
 constraints, and safety information. It requires no model API or runtime
 dependency.
 
-To use it, make the skill available through your agent's supported instruction
+It also provides a deterministic Python measurement core and CLI using
+`tiktoken`'s `cl100k_base` encoding. Install from a clone with Python 3.10 or
+newer:
+
+```bash
+python -m pip install -e .
+cablegram measure examples/message.txt
+```
+
+```text
+characters: 33
+words:      4
+tokens:     6
+tokenizer:  cl100k_base
+```
+
+Use `-` to read from stdin and `--json` for machine-readable output:
+
+```bash
+cablegram measure message.txt --json
+```
+
+The Python API returns the same immutable result:
+
+```python
+from cablegram import measure
+
+result = measure("Maximum meaning. Minimum tokens.")
+print(result.tokens)  # 6 with cl100k_base
+```
+
+Characters are Unicode code points, words are non-empty whitespace-delimited
+strings, and tokens are exact `cl100k_base` encoding units. Counts describe the
+provided text exactly, including trailing newlines.
+
+To use the skill, make it available through your agent's supported instruction
 or skill mechanism. Instruction formats vary, so compatibility is not claimed
 for products that have not been tested.
 
-This repository does **not** yet include a tokenizer CLI, optimizer, semantic
-intermediate representation, verifier, full benchmark harness, or middleware.
+This repository does **not** yet include an optimizer, semantic intermediate
+representation, verifier, full benchmark harness, or middleware.
 
 ## Optimization target
 
-Cablegram's conceptual target is:
+Cablegram's conceptual token-efficiency target is:
 
-```text
-useful information transferred / tokens consumed
-```
+$$
+\operatorname{TokenEfficiency}(m, r, t) =
+\frac{\operatorname{UsefulInformation}(m, r, t)}{\operatorname{Tokens}(m)}
+$$
+
+The corresponding optimization objective is:
+
+$$
+m^* = \arg\min_m \operatorname{Tokens}(m)
+\quad \text{subject to} \quad
+\operatorname{Utility}(m, r, t)
+\geq \operatorname{Utility}(m_0, r, t) - \varepsilon
+$$
+
+Here, $m_0$ is the original message, $m$ is a candidate representation, $r$ is
+the receiver, and $t$ is the task. These equations define the research target;
+the current release measures token cost but does not yet estimate utility.
 
 More formally, find the lowest-token representation whose utility for a given
 receiver and task remains within an acceptable tolerance of the original. This
@@ -121,11 +170,10 @@ measurements, and limitations are stored in
 
 ## Roadmap
 
-The next phase is measurement: a small, deterministic core and one tokenizer
-backend that can report characters, words, and tokens. Later phases may explore
-auditable optimization passes, reproducible benchmarks, a small semantic
-representation, verification, receiver-aware optimization, history compaction,
-and middleware.
+The measurement foundation is now implemented. The next phase is a conservative,
+auditable deterministic optimizer. Later phases may explore reproducible
+benchmarks, a small semantic representation, verification, receiver-aware
+optimization, history compaction, and middleware.
 
 See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan and
 [`docs/VISION.md`](docs/VISION.md) for the research direction. Planned features

@@ -11,14 +11,14 @@ tested, and honest about what it establishes.
 - Make no optimizer claims. Keep the single pilot comparison clearly separated
   from the future benchmark harness and avoid generalizing its result.
 
-## Phase 2: measurement foundation
+## Phase 2: measurement foundation (complete)
 
 - Add a minimal Python core and `cablegram measure` command.
 - Report characters, words, and tokens with clear definitions.
 - Support one tokenizer behind an interface that can evolve.
 - Add deterministic tests and minimal CI.
 
-## Phase 3: deterministic optimization MVP
+## Phase 3: deterministic optimization MVP (next)
 
 - Add conservative, auditable transformations such as filler elimination,
   whitespace normalization, and exact duplicate removal.

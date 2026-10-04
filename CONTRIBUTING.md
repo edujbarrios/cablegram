@@ -13,14 +13,24 @@ for the current phase; see [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
 ## Development setup
 
-Phase 1 contains documentation and a standalone skill, so no runtime or package
-installation is required. Clone the repository and create a branch from the
-default branch.
+Cablegram requires Python 3.10 or newer. Clone the repository, create a virtual
+environment, and install the project in editable mode:
 
-When executable code is introduced, its supported Python version, installation
-steps, test command, formatting command, and static checks will be documented
-here and in the project metadata. Do not add tools merely to make the repository
-appear complete.
+```bash
+python -m venv .venv
+# Windows: .venv\Scripts\activate
+# macOS/Linux: source .venv/bin/activate
+python -m pip install -e .
+```
+
+Run the deterministic test suite with:
+
+```bash
+python -m unittest discover -v
+```
+
+Build distribution artifacts with `python -m build` when the `build` package is
+available. Do not add tools merely to make the repository appear complete.
 
 ## Making a contribution
 
