@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+title: Cablegram
+message: "If you use Cablegram, please cite this repository."
+type: software
+authors:
+  - family-names: Barrios
+    given-names: Eduardo J.
+repository-code: "https://github.com/edujbarrios/cablegram"
+license: Apache-2.0

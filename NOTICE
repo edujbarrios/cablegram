@@ -1,0 +1,22 @@
+Cablegram
+Copyright 2026 Eduardo J. Barrios
+
+Cablegram is conceptually inspired in part by:
+
+Suffice
+Eduardo J. Barrios
+https://github.com/edujbarrios/suffice
+
+Suffice explores minimum successful token budgets under task-quality
+constraints. Cablegram explores the related problem of minimum sufficient
+representations for communication.
+
+Caveman
+https://github.com/JuliusBrussee/caveman
+
+Caveman inspired aspects of Cablegram's exploration of concise communication
+for AI coding agents.
+
+These acknowledgements describe conceptual inspiration. Cablegram does not
+contain code derived from either project at this time, and no endorsement,
+partnership, or affiliation is implied.
