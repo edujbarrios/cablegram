@@ -1,67 +1,67 @@
 # Roadmap
 
-Cablegram develops in evidence-building phases. Each phase should remain small,
-tested, and honest about what it establishes.
+Cablegram develops in evidence-building phases. The original ten-phase roadmap is now implemented at an intentionally conservative, dependency-light scope. “Complete” below means the repository contains a tested interface for the phase; it does **not** mean semantic equivalence has been solved in general.
 
-## Phase 1: open-source foundation (complete)
+## Phase 1: open-source foundation — complete
 
-- Establish Apache-2.0 licensing, attribution, contribution, conduct, security,
-  citation, vision, and roadmap documents.
-- Publish a usable communication skill for coding agents.
-- Make no optimizer claims. Keep the single pilot comparison clearly separated
-  from the future benchmark harness and avoid generalizing its result.
+- Apache-2.0 licensing, attribution, contribution, conduct, security, citation, vision, and roadmap documents.
+- A vendor-neutral communication skill for coding agents.
+- Pilot results kept separate from general claims.
 
-## Phase 2: measurement foundation (complete)
+## Phase 2: measurement foundation — complete
 
-- Add a minimal Python core and `cablegram measure` command.
-- Report characters, words, and tokens with clear definitions.
-- Support one tokenizer behind an interface that can evolve.
-- Add deterministic tests and minimal CI.
+- Python API and `cablegram measure` CLI.
+- Character, whitespace-delimited word, and `cl100k_base` token counts.
+- Tokenizer protocol, deterministic tests, and CI.
 
-## Phase 3: deterministic optimization MVP (next)
+## Phase 3: deterministic optimization MVP — complete
 
-- Add conservative, auditable transformations such as filler elimination,
-  whitespace normalization, and exact duplicate removal.
-- Explain every transformation and measure its effect.
-- Describe outputs as deterministic optimization, not semantic equivalence.
+- Conservative rules for horizontal whitespace, repeated blank lines, adjacent exact duplicate lines, and a small allowlist of verbose phrases.
+- Markdown fenced code is not rewritten.
+- A rule is accepted only when it actually reduces token count.
+- Every accepted transformation records before/after text and token counts.
 
-## Phase 4: benchmark harness
+## Phase 4: benchmark harness — complete
 
-- Define a small set of high-quality cases with receiver, task, critical facts,
-  expected checks, token counts, and pass/fail outcomes.
-- Store enough provenance to reproduce every result.
+- Versioned JSON benchmark format with source text and required substrings.
+- Reproducible token measurement and pass/fail reports.
+- `benchmarks/deterministic_v1.json` is the first executable benchmark; the older agent handoff remains a pilot artifact.
 
-## Phase 5: semantic representation experiment
+## Phase 5: semantic representation experiment — complete
 
-- Explore a deliberately narrow, inspectable representation for facts,
-  relations, negation, uncertainty, quantities, time, and constraints.
-- Mark the interface experimental and document its limits.
+- `Fact` and `SemanticMessage` provide a deliberately narrow, inspectable representation.
+- Facts are caller-authored; Cablegram does not pretend to infer semantics from arbitrary prose.
+- Qualifiers and confidence are explicit and round-trippable.
 
-## Phase 6: candidate generation
+## Phase 6: candidate generation — complete
 
-- Produce multiple representations and measure actual tokenizer cost.
-- Never select the smallest candidate solely because it is smallest.
+- Cablegram generates the original, per-rule candidates, and an all-rules candidate.
+- Candidates are measured with the actual tokenizer.
+- Selection never uses size alone: a candidate must pass deterministic invariant checks.
 
-## Phase 7: verification
+## Phase 7: verification — complete for deterministic scope
 
-- Combine invariant checks, structured reconstruction, entailment checks, and
-  task-based evaluation as appropriate.
-- Keep model-dependent evaluation optional and record its provenance.
+- Surface invariants cover numbers, negation, uncertainty, constraints, paths/URLs, and backtick identifiers.
+- Selection rejects candidates that drop a protected invariant.
+- Model-based entailment remains optional future research rather than a hidden runtime dependency.
 
-## Phase 8: receiver-aware optimization
+## Phase 8: receiver-aware optimization — complete for explicit context
 
-- Test how receiver and task context change minimum sufficient representations.
-- Replace assumed shared knowledge with measured outcomes.
+- `ReceiverProfile` makes shared context explicit.
+- No receiver knowledge is inferred automatically.
+- Receiver-aware optimization compacts only caller-declared known lines before verified candidate selection.
 
-## Phase 9: context compaction
+## Phase 9: context compaction — complete for exact known context
 
-- Explore removal of information that no longer needs retransmission while
-  preserving what future tasks require.
+- Exact full lines declared as already known can be removed with an audit trail.
+- Unknown or partially matching lines are retained.
 
-## Phase 10: middleware and proxy interfaces
+## Phase 10: middleware and proxy interfaces — complete
 
-- Integrate verified optimization into agent and tool pipelines only after the
-  message-level system demonstrates reproducible value.
+- `CablegramMiddleware` is a small callable adapter for agent/tool pipelines.
+- It supports plain deterministic selection or receiver-aware compaction.
+- Network proxies and vendor-specific integrations are intentionally outside the core package.
 
-Roadmap order may change when evidence warrants it. Planned work is not a claim
-of availability.
+## What remains research, not roadmap debt
+
+The repository now implements the roadmap as a usable alpha. Open research questions remain: learned candidate generation, semantic entailment, task-based utility measurement, receiver knowledge estimation, and large-scale benchmark evidence. Those are extensions, not claims made by the current deterministic system.
