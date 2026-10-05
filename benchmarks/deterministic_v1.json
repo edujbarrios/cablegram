@@ -1,0 +1,33 @@
+{
+  "benchmark": "deterministic-v1",
+  "schema": 1,
+  "tokenizer": "cl100k_base",
+  "cases": [
+    {
+      "name": "incident handoff constraints",
+      "input": "Please note that in order to reproduce, run 4 instances at 200 requests/second.\nPlease note that in order to reproduce, run 4 instances at 200 requests/second.\nDo not deploy before multi-instance testing.\n",
+      "required_substrings": [
+        "4 instances",
+        "200 requests/second",
+        "Do not deploy"
+      ]
+    },
+    {
+      "name": "uncertainty and quantities",
+      "input": "Root cause unconfirmed.  Redis pool max 50.\n\n\nRestart restores service for 20 minutes.\n",
+      "required_substrings": [
+        "Root cause unconfirmed",
+        "max 50",
+        "20 minutes"
+      ]
+    },
+    {
+      "name": "fenced code preservation",
+      "input": "Please note that the exact command follows.\n```bash\ncurl  -f  https://example.test/health\n```\nDo not change the command.\n",
+      "required_substrings": [
+        "curl  -f  https://example.test/health",
+        "Do not change"
+      ]
+    }
+  ]
+}
